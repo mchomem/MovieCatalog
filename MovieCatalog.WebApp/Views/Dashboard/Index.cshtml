@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Dashboad";
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Dashboard.init();
+    })
+
+    Dashboard = {
+        self: this,
+
+        init: function () {
+            this.addControls();
+            this.getMovieCountRecords();
+        },
+
+        addControls: function () {
+            self.$loader = $('#loader');
+            self.$dashboardPanel = $('#dashboardPanel');
+            self.$totalMovieRecords = $('#totalMovieRecords');
+            self.$moviesByRating = $('#moviesByRating');
+            self.$movieTitle = $('#movieTitle');
+            self.$movieReleaseDate = $('#movieReleaseDate');
+            self.$movieGenre = $('#movieGenre');
+            self.$movieRating = $('#movieRating');
+        },
+
+        getMovieCountRecords: function () {
+            self.$loader.show();
+
+            $.get({
+                url: '/dashboard/getdashboarddata'
+            })
+                .done(function (data, textStatus, jqXHR) {
+                    if (data != null) {
+                        self.$totalMovieRecords.text(data.totalMovies);
+
+                        data.moviesRating.forEach(function (x) {
+                            self.$moviesByRating.append(`<div>${x.totalMovies} - ${x.rating}</div>`)
+                        });
+
+                        self.$movieTitle.text(data.lastMovieAdded.title);
+                        self.$movieReleaseDate.text(moment(data.lastMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
+                        self.$movieGenre.text(data.lastMovieAdded.genre);
+                        self.$movieRating.text(data.lastMovieAdded.rating);
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    // Caixa de erro.
+                    ;
+                })
+                .always(function (jqXHR, textStatus, errorThrown) {
+                    self.$loader.hide();
+                    self.$dashboardPanel.show();
+                });
+        }
+    }
+</script>
+
+<div id="loader" class="row" style="display:none;margin-top:200px;">
+    <div class="col text-center">
+        <i class="fa-solid fa-gear fa-spin" style="font-size:100px;"></i>
+    </div>
+</div>
+
+<div id="dashboardPanel" style="display:none;">
+    <div class="row mt-3">
+        <div class="col d-flex align-items-stretch">
+            <div class="card bg-success text-white" style="width:100%;">
+                <div class="card-body d-flex flex-column text-center">
+                    Total movie records
+                    <label id="totalMovieRecords" style="font-size:60px;"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col d-flex align-items-stretch">
+            <div class="card bg-danger text-white" style="width:100%;">
+                <div class="card-body d-flex flex-column text-center">
+                    Total movies by rating
+                    <span id="moviesByRating" style="font-size:30px;"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col d-flex align-items-stretch">
+            <div class="card bg-warning" style="width:100%;">
+                <div class="card-body d-flex flex-column text-center">
+                    Last movie added to catalog
+                    <label id="movieTitle" style="font-size:20px;"></label>
+                    <label id="movieReleaseDate" style="font-size:20px;"></label>
+                    <label id="movieGenre" style="font-size:20px;"></label>
+                    <label id="movieRating" style="font-size:20px;"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

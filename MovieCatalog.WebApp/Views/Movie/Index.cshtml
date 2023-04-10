@@ -1,0 +1,148 @@
+﻿@model MovieCatalog.WebApp.Models.MovieFiltersViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Movie</h1>
+<hr />
+<div class="row">
+    <div class="col">
+        <buton class="btn btn-success"
+               type="button"
+               onclick="location.href='@Url.Action("Create", "Movie")'">New</buton>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card mt-3">
+            <div class="card-header text-white bg-primary">
+                Filters
+            </div>
+            <div class="card-body">
+                <form asp-controller="Movie" asp-action="Index" method="get">
+                    <div class="row mb-3">
+                        <div class="col-3">
+                            <label class="form-label">Title</label>
+                            <input class="form-control" type="text" name="MovieTitle" />
+                        </div>
+
+                        <div class="col-3">
+                            <label class="form-label">Genres</label>
+                            <select class="form-select" asp-for="MovieGenre" asp-items="Model.Genres">
+                                <option value="">All</option>
+                            </select>
+                        </div>
+
+                        <div class="col-3">
+                            <label class="form-label">Ratings</label>
+                            <select class="form-select" asp-for="MovieRating" asp-items="Model.Ratings">
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="col">
+                                <button class="btn btn-outline-primary" type="button" onclick="location.href='@Url.Action("Index", "Movie")'">Clear</button>
+                                <button class="btn btn-primary" type="submit">Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card mt-3">
+            <div class="card-header text-white bg-primary">
+                Listing
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Movies![0].Title)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Movies![0].ReleaseDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Movies![0].Genre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Movies![0].Price)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.Movies![0].Rating)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Movies!)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReleaseDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Genre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.Rating == "R")
+                                        {
+                                            <div class="badge bg-danger" style="width:100%;">
+                                                @Html.DisplayFor(modelItem => item.Rating)
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge bg-success" style="width:100%;">
+                                                @Html.DisplayFor(modelItem => item.Rating)
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary"
+                                            type="button"
+                                            onclick="location.href='@Url.Action("Edit", "Movie", new {id = item.Id})'"
+                                            title="Edit">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary"
+                                            type="button"
+                                            onclick="location.href='@Url.Action("Details", "Movie", new {id = item.Id})'"
+                                            title="Details">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+
+                                    <button class="btn btn-sm btn-danger"
+                                            type="button"
+                                            onclick="location.href='@Url.Action("Delete", "Movie", new {id = item.Id})'"
+                                            title="Delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
