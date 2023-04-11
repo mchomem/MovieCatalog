@@ -24,6 +24,7 @@
             self.$movieReleaseDate = $('#movieReleaseDate');
             self.$movieGenre = $('#movieGenre');
             self.$movieRating = $('#movieRating');
+            self.$alertError = $('#alertError');
         },
 
         getMovieCountRecords: function () {
@@ -45,18 +46,35 @@
                         self.$movieGenre.text(data.lastMovieAdded.genre);
                         self.$movieRating.text(data.lastMovieAdded.rating);
                     }
+
+                    self.$dashboardPanel.show();
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    // Caixa de erro.
-                    ;
+                    self.$loader.hide();
+                    self.$alertError.show();
+                    self.$dashboardPanel.hide();
                 })
                 .always(function (jqXHR, textStatus, errorThrown) {
                     self.$loader.hide();
-                    self.$dashboardPanel.show();
                 });
         }
     }
 </script>
+
+<div id="alertError" class="row" style="display:none;">
+    <div class="col">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">
+                <i class="fa-solid fa-circle-exclamation" style="margin-right: 4px;"></i>
+                Error!
+            </h4>
+            <p>Unable to access data for dashboard.</p>
+            <hr />
+            <p>Contact system administrator</p>
+        </div>
+    </div>
+</div>
+
 
 <div id="loader" class="row" style="display:none;margin-top:200px;">
     <div class="col text-center">
