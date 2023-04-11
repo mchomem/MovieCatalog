@@ -81,7 +81,7 @@
                             <th class="text-center">
                                 @Html.DisplayNameFor(model => model.Movies![0].Rating)
                             </th>
-                            <th></th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,22 +116,22 @@
                                         }
                                     }
                                 </td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary"
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-primary"
                                             type="button"
                                             onclick="location.href='@Url.Action("Edit", "Movie", new {id = item.Id})'"
                                             title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary"
+                                    <button class="btn btn-sm btn-outline-primary"
                                             type="button"
                                             onclick="location.href='@Url.Action("Details", "Movie", new {id = item.Id})'"
                                             title="Details">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
 
-                                    <button class="btn btn-sm btn-danger"
+                                    <button class="btn btn-sm btn-outline-danger"
                                             type="button"
                                             onclick="location.href='@Url.Action("Delete", "Movie", new {id = item.Id})'"
                                             title="Delete">
