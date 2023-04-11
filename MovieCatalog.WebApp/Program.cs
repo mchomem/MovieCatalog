@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieCatalog.WebApp.Data;
 using MovieCatalog.WebApp.Models;
+using MovieCatalog.WebApp.Repositories;
+using MovieCatalog.WebApp.Repositories.Interfaces;
+using MovieCatalog.WebApp.Services;
+using MovieCatalog.WebApp.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +12,12 @@ builder.Services.AddDbContext<MovieCatalogContext>(options =>
     options
         .LogTo(Console.WriteLine)
         .EnableSensitiveDataLogging()
-        .UseSqlServer(builder.Configuration.GetConnectionString("MovieCatalogContext") ?? throw new InvalidOperationException("Connection string 'MovieCatalogContext' not found.")));       
+        .UseSqlServer(builder.Configuration.GetConnectionString("MovieCatalogContext") ?? throw new InvalidOperationException("Connection string 'MovieCatalogContext' not found.")));
+
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
