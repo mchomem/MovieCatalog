@@ -1,4 +1,4 @@
-﻿@model MovieCatalog.WebApp.Models.MovieFiltersViewModel
+﻿@model MovieCatalog.WebApp.Models.MovieViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -25,19 +25,19 @@
                     <div class="row mb-3">
                         <div class="col-3">
                             <label class="form-label">Title</label>
-                            <input class="form-control" type="text" name="MovieTitle" />
+                            <input class="form-control" type="text" name="TitleFilter" asp-for="TitleFilter" />
                         </div>
 
                         <div class="col-3">
                             <label class="form-label">Genres</label>
-                            <select class="form-select" asp-for="MovieGenre" asp-items="Model.Genres">
+                            <select class="form-select" asp-for="GenreFilter" asp-items="Model.Genres">
                                 <option value="">All</option>
                             </select>
                         </div>
 
                         <div class="col-3">
                             <label class="form-label">Ratings</label>
-                            <select class="form-select" asp-for="MovieRating" asp-items="Model.Ratings">
+                            <select class="form-select" asp-for="RatingFilter" asp-items="Model.Ratings">
                                 <option value="">All</option>
                             </select>
                         </div>
@@ -65,7 +65,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col mt-3 mb-3">
-                        Total records found <b class="badge bg-secondary">@Model.MoviePackageData.TotalRecordsFounded </b>
+                        Total records found <b class="badge bg-secondary">@Model!.MoviePackageData!.TotalRecordsFounded </b>
                     </div>
                 </div>
                 <table class="table">
@@ -145,18 +145,33 @@
                                 </td>
                             </tr>
                         }
+
+                        @if (Model.MoviePackageData.TotalPageMovie == 0)
+                        {
+                            <tr>
+                                <td colspan="6">
+                                    <div class="alert alert-warning text-center fw-bold">
+                                        No data founded.
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
                     </tbody>
                 </table>
 
-                <a asp-action="Index"
-                   asp-route-pageNumber="@(Model.PageIndex - 1)"
-                   class="btn btn-outline-secondary">Previous</a>
+                <div style="display: @(Model.MoviePackageData.TotalPageMovie > 0 ? "block" : "none");">
+                    <a asp-action="Index"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       class="btn btn-outline-secondary">Previous</a>
 
-                <a asp-action="Index"
-                   asp-route-pageNumber="@(Model.PageIndex + 1)"
-                   class="btn btn-outline-secondary">Next</a>
+                    <a asp-action="Index"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       class="btn btn-outline-secondary">Next</a>
 
-                <span>@Model.PageIndex of @Model.MoviePackageData.TotalPageMovie </span>                
+                    <span>@Model.PageIndex of @Model.MoviePackageData.TotalPageMovie </span>
+                </div>
+
             </div>
         </div>
     </div>

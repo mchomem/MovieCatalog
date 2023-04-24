@@ -13,16 +13,16 @@ namespace MovieCatalog.WebApp.Controllers
         public MovieController(IMovieService movieService)
             => _movieService = movieService;
 
-        public async Task<IActionResult> Index(string movieTitle, string movieGenre, string movieRating, int? pageNumber = 1)
+        public async Task<IActionResult> Index(string titleFilter, string genreFilter, string ratingFilter, int? pageNumber = 1)
         {
-            if (movieTitle != null || pageNumber < 1)
+            if (titleFilter != null || pageNumber < 1)
                 pageNumber = 1;
 
             int pageSize = 10;
 
-            var movieFiltersView = new MovieFiltersViewModel
+            var movieFiltersView = new MovieViewModel
             {
-                MoviePackageData = await _movieService.GetAllAsync(movieTitle!, movieGenre, movieRating, pageNumber!.Value, pageSize),
+                MoviePackageData = await _movieService.GetAllAsync(titleFilter!, genreFilter, ratingFilter, pageNumber!.Value, pageSize),
                 Genres = new SelectList(await _movieService.GetGenresAsync()),
                 Ratings = new SelectList(await _movieService.GetRatingsAsync()),
                 PageIndex = pageNumber.Value,
@@ -124,9 +124,7 @@ namespace MovieCatalog.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-
             await _movieService.DeleteAsync(id);
-
             return RedirectToAction(nameof(Index));
         }
     }
