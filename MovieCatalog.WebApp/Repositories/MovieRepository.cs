@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieCatalog.WebApp.Data;
+using MovieCatalog.WebApp.Dtos;
 using MovieCatalog.WebApp.Models;
 using MovieCatalog.WebApp.Repositories.Interfaces;
 
@@ -12,20 +13,49 @@ namespace MovieCatalog.WebApp.Repositories
         public MovieRepository(MovieCatalogContext context)
             => _context = context;
 
-        public async Task<List<Movie>> GetAllAsync(string movieTitle, string movieGenre, string movieRating)
+        public async Task<MoviePackageData> GetAllAsync(string movieTitle, string movieGenre, string movieRating, int pageIndex, int pageSize)
         {
+            MoviePackageData moviePackageData = new MoviePackageData();
+
             List<Movie> movies = await _context.Movie.ToListAsync();
 
             if (!string.IsNullOrEmpty(movieTitle))
-                movies = movies.Where(x => x.Title!.Contains(movieTitle)).ToList();
+                movies = movies
+                    .Where(x => x.Title!.Contains(movieTitle))
+                    .ToList();
 
             if (!string.IsNullOrEmpty(movieGenre))
-                movies = movies.Where(x => x.Genre == movieGenre).ToList();
+                movies = movies
+                    .Where(x => x.Genre == movieGenre)
+                    .ToList();
 
             if (!string.IsNullOrEmpty(movieRating))
-                movies = movies.Where(x => x.Rating == movieRating).ToList();
+                movies = movies
+                    .Where(x => x.Rating == movieRating)
+                    .ToList();
 
-            return movies;
+            var count = movies.Count();
+
+            moviePackageData.TotalPageMovie = (int)Math.Ceiling(count / (double)pageSize);
+            moviePackageData.TotalRecordsFounded = count;
+
+            movies = movies
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            moviePackageData.Movies = movies.Select(x => new MovieDto()
+            {
+                Id = x.Id,
+                Title = x.Title,
+                ReleaseDate = x.ReleaseDate,
+                Genre = x.Genre,
+                Price = x.Price,
+                Rating = x.Rating,
+            })
+            .ToList();
+
+            return moviePackageData;
         }
 
         public async Task<List<string>> GetGenresAsync()

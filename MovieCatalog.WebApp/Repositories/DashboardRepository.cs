@@ -14,8 +14,10 @@ namespace MovieCatalog.WebApp.Repositories
 
         public async Task<DashboardDto> GetDashboardData()
         {
+#if DEBUG
             // Test delay response of dashboard.
-            // Thread.Sleep(5000);
+            Thread.Sleep(5000);
+#endif
 
             DashboardDto dashboardData = new DashboardDto();
             dashboardData.TotalMovies = await _context.Movie.CountAsync();

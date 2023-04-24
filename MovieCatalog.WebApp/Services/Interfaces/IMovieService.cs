@@ -4,7 +4,7 @@ namespace MovieCatalog.WebApp.Services.Interfaces
 {
     public interface IMovieService
     {
-        public Task<List<Movie>> GetAllAsync(string movieTitle, string movieGenre, string movieRating);
+        public Task<MoviePackageData> GetAllAsync(string movieTitle, string movieGenre, string movieRating, int pageNumber, int pageSize);
 
         public Task<List<string>> GetGenresAsync();
 

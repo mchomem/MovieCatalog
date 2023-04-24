@@ -4,7 +4,7 @@ namespace MovieCatalog.WebApp.Repositories.Interfaces
 {
     public interface IMovieRepository
     {
-        public Task<List<Movie>> GetAllAsync(string movieTitle, string movieGenre, string movieRating);
+        public Task<MoviePackageData> GetAllAsync(string movieTitle, string movieGenre, string movieRating, int pageIndex, int pageSize);
 
         public Task<List<string>> GetGenresAsync();
 

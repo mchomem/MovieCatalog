@@ -65,32 +65,32 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col mt-3 mb-3">
-                        Total records found <b class="badge bg-secondary">@Model.Movies!.Count</b>
+                        Total records found <b class="badge bg-secondary">@Model.MoviePackageData.TotalRecordsFounded </b>
                     </div>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Movies![0].Title)
+                                @Html.DisplayNameFor(model => model!.MoviePackageData!.Movies![0].Title)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Movies![0].ReleaseDate)
+                                @Html.DisplayNameFor(model => model!.MoviePackageData!.Movies![0].ReleaseDate)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Movies![0].Genre)
+                                @Html.DisplayNameFor(model => model!.MoviePackageData!.Movies![0].Genre)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Movies![0].Price)
+                                @Html.DisplayNameFor(model => model!.MoviePackageData!.Movies![0].Price)
                             </th>
                             <th class="text-center">
-                                @Html.DisplayNameFor(model => model.Movies![0].Rating)
+                                @Html.DisplayNameFor(model => model!.MoviePackageData!.Movies![0].Rating)
                             </th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Movies!)
+                        @foreach (var item in Model.MoviePackageData.Movies!)
                         {
                             <tr>
                                 <td>
@@ -122,14 +122,14 @@
                                     }
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-outline-primary"
+                                    <button class="btn btn-sm btn-outline-secondary"
                                             type="button"
                                             onclick="location.href='@Url.Action("Edit", "Movie", new {id = item.Id})'"
                                             title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
-                                    <button class="btn btn-sm btn-outline-primary"
+                                    <button class="btn btn-sm btn-outline-secondary"
                                             type="button"
                                             onclick="location.href='@Url.Action("Details", "Movie", new {id = item.Id})'"
                                             title="Details">
@@ -147,6 +147,16 @@
                         }
                     </tbody>
                 </table>
+
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   class="btn btn-outline-secondary">Previous</a>
+
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   class="btn btn-outline-secondary">Next</a>
+
+                <span>@Model.PageIndex of @Model.MoviePackageData.TotalPageMovie </span>                
             </div>
         </div>
     </div>

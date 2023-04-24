@@ -13,13 +13,19 @@ namespace MovieCatalog.WebApp.Controllers
         public MovieController(IMovieService movieService)
             => _movieService = movieService;
 
-        public async Task<IActionResult> Index(string movieTitle, string movieGenre, string movieRating)
+        public async Task<IActionResult> Index(string movieTitle, string movieGenre, string movieRating, int? pageNumber = 1)
         {
+            if (movieTitle != null || pageNumber < 1)
+                pageNumber = 1;
+
+            int pageSize = 10;
+
             var movieFiltersView = new MovieFiltersViewModel
             {
-                Movies = await _movieService.GetAllAsync(movieTitle, movieGenre, movieRating),
+                MoviePackageData = await _movieService.GetAllAsync(movieTitle!, movieGenre, movieRating, pageNumber!.Value, pageSize),
                 Genres = new SelectList(await _movieService.GetGenresAsync()),
-                Ratings = new SelectList(await _movieService.GetRatingsAsync())
+                Ratings = new SelectList(await _movieService.GetRatingsAsync()),
+                PageIndex = pageNumber.Value,
             };
 
             return View(movieFiltersView);
@@ -30,8 +36,8 @@ namespace MovieCatalog.WebApp.Controllers
         {
             var movie = await _movieService.GetAsync(id);
 
-            if (movie == null)            
-                return NotFound();            
+            if (movie == null)
+                return NotFound();
 
             return View(movie);
         }
@@ -61,10 +67,10 @@ namespace MovieCatalog.WebApp.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var movie = await _movieService.GetAsync(id);
-            
-            if (movie == null)            
+
+            if (movie == null)
                 return NotFound();
-            
+
             return View(movie);
         }
 
@@ -88,7 +94,7 @@ namespace MovieCatalog.WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if(await _movieService.Exists(id))
+                    if (await _movieService.Exists(id))
                     {
                         return NotFound();
                     }
@@ -107,8 +113,8 @@ namespace MovieCatalog.WebApp.Controllers
         {
             var movie = await _movieService.GetAsync(id);
 
-            if (movie == null)           
-                return NotFound();            
+            if (movie == null)
+                return NotFound();
 
             return View(movie);
         }

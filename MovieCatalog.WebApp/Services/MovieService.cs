@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MovieCatalog.WebApp.Models;
+﻿using MovieCatalog.WebApp.Models;
 using MovieCatalog.WebApp.Repositories.Interfaces;
 using MovieCatalog.WebApp.Services.Interfaces;
 
@@ -12,8 +11,8 @@ namespace MovieCatalog.WebApp.Services
         public MovieService(IMovieRepository movieRepository)
             => _movieRepository = movieRepository;
 
-        public async Task<List<Movie>> GetAllAsync(string movieTitle, string movieGenre, string movieRating)
-            => await _movieRepository.GetAllAsync(movieTitle, movieGenre, movieRating);
+        public async Task<MoviePackageData> GetAllAsync(string movieTitle, string movieGenre, string movieRating, int pageNumber, int pageSize)
+            => await _movieRepository.GetAllAsync(movieTitle, movieGenre, movieRating, pageNumber, pageSize);
 
         public async Task<List<string>> GetGenresAsync()
             => await _movieRepository.GetGenresAsync();
