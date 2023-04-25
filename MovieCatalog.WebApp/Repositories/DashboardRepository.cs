@@ -16,7 +16,7 @@ namespace MovieCatalog.WebApp.Repositories
         {
 #if DEBUG
             // Test delay response of dashboard.
-            Thread.Sleep(5000);
+            Thread.Sleep(1000);
 #endif
 
             DashboardDto dashboardData = new DashboardDto();
@@ -29,6 +29,17 @@ namespace MovieCatalog.WebApp.Repositories
                     TotalMovies = x.Count()
                 })
                 .ToListAsync();
+
+            dashboardData.FirstMovieAdded
+                = await _context.Movie
+                    .Select(x => new MovieDto()
+                    {
+                        Title = x.Title,
+                        ReleaseDate = x.ReleaseDate,
+                        Genre = x.Genre,
+                        Rating = x.Rating
+                    })
+                    .FirstOrDefaultAsync();
 
             dashboardData.LastMovieAdded =
                 await _context.Movie

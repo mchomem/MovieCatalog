@@ -20,10 +20,17 @@
             self.$dashboardPanel = $('#dashboardPanel');
             self.$totalMovieRecords = $('#totalMovieRecords');
             self.$moviesByRating = $('#moviesByRating');
-            self.$movieTitle = $('#movieTitle');
-            self.$movieReleaseDate = $('#movieReleaseDate');
-            self.$movieGenre = $('#movieGenre');
-            self.$movieRating = $('#movieRating');
+
+            self.$firstMovieTitle = $('#firstMovieTitle');
+            self.$firstMovieReleaseDate = $('#firstMovieReleaseDate');
+            self.$firstMovieGenre = $('#firstMovieGenre');
+            self.$firstMovieRating = $('#firstMovieRating');
+
+            self.$lastMovieTitle = $('#lastMovieTitle');
+            self.$lastMovieReleaseDate = $('#lastMovieReleaseDate');
+            self.$lastMovieGenre = $('#lastMovieGenre');
+            self.$lastMovieRating = $('#lastMovieRating');
+
             self.$alertError = $('#alertError');
         },
 
@@ -37,14 +44,32 @@
                     if (data != null) {
                         self.$totalMovieRecords.text(data.totalMovies);
 
-                        data.moviesRating.forEach(function (x) {
-                            self.$moviesByRating.append(`<div>${x.totalMovies} - ${x.rating}</div>`)
-                        });
+                        self.$firstMovieTitle.text(data.firstMovieAdded.title);
+                        self.$firstMovieReleaseDate.text(moment(data.firstMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
+                        self.$firstMovieGenre.text(data.firstMovieAdded.genre);
+                        self.$firstMovieRating.text(data.firstMovieAdded.rating);
 
-                        self.$movieTitle.text(data.lastMovieAdded.title);
-                        self.$movieReleaseDate.text(moment(data.lastMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
-                        self.$movieGenre.text(data.lastMovieAdded.genre);
-                        self.$movieRating.text(data.lastMovieAdded.rating);
+                        self.$lastMovieTitle.text(data.lastMovieAdded.title);
+                        self.$lastMovieReleaseDate.text(moment(data.lastMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
+                        self.$lastMovieGenre.text(data.lastMovieAdded.genre);
+                        self.$lastMovieRating.text(data.lastMovieAdded.rating);
+
+                        data.moviesRating.forEach(function (x) {
+
+                            let bootStrapBgColors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];
+
+                            let rand = Math.floor(Math.random() * bootStrapBgColors.length);
+
+                            let div = `<div class="col d-flex align-items-stretch" >
+                                                        <div class="card bg-${bootStrapBgColors[rand]}" style = "width:100%;" >
+                                                                <div class="card-body d-flex flex-column text-center fw-bold text-white">
+                                                                ${x.totalMovies} - ${x.rating}
+                                                            </div>
+                                                        </div>
+                                                    </div>`
+
+                            self.$moviesByRating.append(div);
+                        });
                     }
 
                     self.$dashboardPanel.show();
@@ -75,7 +100,6 @@
     </div>
 </div>
 
-
 <div id="loader" class="row" style="display:none;margin-top:200px;">
     <div class="col text-center">
         <i class="fa-solid fa-gear fa-spin" style="font-size:100px;"></i>
@@ -96,22 +120,27 @@
         <div class="col d-flex align-items-stretch">
             <div class="card bg-danger text-white" style="width:100%;">
                 <div class="card-body d-flex flex-column text-center">
-                    Total movies by rating
-                    <span id="moviesByRating" style="font-size:30px;"></span>
+                    First movie added to catalog
+                    <label id="firstMovieTitle" style="font-size:20px;"></label>
+                    <label id="firstMovieReleaseDate" style="font-size:20px;"></label>
+                    <label id="firstMovieGenre" style="font-size:20px;"></label>
+                    <label id="firstMovieRating" style="font-size:20px;"></label>
                 </div>
             </div>
         </div>
 
         <div class="col d-flex align-items-stretch">
-            <div class="card bg-warning" style="width:100%;">
+            <div class="card bg-warning text-white" style="width:100%;">
                 <div class="card-body d-flex flex-column text-center">
                     Last movie added to catalog
-                    <label id="movieTitle" style="font-size:20px;"></label>
-                    <label id="movieReleaseDate" style="font-size:20px;"></label>
-                    <label id="movieGenre" style="font-size:20px;"></label>
-                    <label id="movieRating" style="font-size:20px;"></label>
+                    <label id="lastMovieTitle" style="font-size:20px;"></label>
+                    <label id="lastMovieReleaseDate" style="font-size:20px;"></label>
+                    <label id="lastMovieGenre" style="font-size:20px;"></label>
+                    <label id="lastMovieRating" style="font-size:20px;"></label>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="moviesByRating" class="row mt-3"></div>
 </div>
