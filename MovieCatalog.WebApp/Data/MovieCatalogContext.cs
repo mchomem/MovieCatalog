@@ -5,11 +5,19 @@ namespace MovieCatalog.WebApp.Data
 {
     public class MovieCatalogContext : DbContext
     {
-        public MovieCatalogContext (DbContextOptions<MovieCatalogContext> options)
+        public DbSet<Movie> Movie { get; set; } = default!;
+
+        public MovieCatalogContext(DbContextOptions<MovieCatalogContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Movie> Movie { get; set; } = default!;
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Movie>()
+                .Property(x => x.CreatedIn)
+                .HasDefaultValueSql("getdate()");
+        }
     }
 }

@@ -36,5 +36,16 @@ namespace MovieCatalog.WebApp.Models
         [Required]
         [StringLength(5)]
         public string? Rating { get; set; }
+
+        [Display(Name = "Created in")]
+        [Column(TypeName = "datetime")]
+        [DataType(DataType.DateTime)]
+        [Required]
+        public DateTime CreatedIn { get; set; }
+
+        [Display(Name = "Modified in")]
+        [Column(TypeName = "datetime")]
+        [DataType(DataType.DateTime)]
+        public DateTime? ModifiedIn { get; set; }
     }
 }

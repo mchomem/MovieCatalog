@@ -87,7 +87,7 @@ namespace MovieCatalog.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating,CreatedIn,ModifiedIn")] Movie movie)
         {
             if (id != movie.Id)
             {
@@ -98,6 +98,7 @@ namespace MovieCatalog.WebApp.Controllers
             {
                 try
                 {
+                    movie.ModifiedIn = DateTime.Now;
                     await _movieService.UpdateAsync(movie);
                 }
                 catch (DbUpdateConcurrencyException)
