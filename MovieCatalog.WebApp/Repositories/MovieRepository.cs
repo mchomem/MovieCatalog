@@ -13,25 +13,25 @@ namespace MovieCatalog.WebApp.Repositories
         public MovieRepository(MovieCatalogContext context)
             => _context = context;
 
-        public async Task<MoviePackageData> GetAllAsync(string movieTitle, string movieGenre, string movieRating, int pageIndex, int pageSize)
+        public async Task<MoviePackageData> GetAllAsync(MovieDto filter, int pageIndex, int pageSize)
         {
             MoviePackageData moviePackageData = new MoviePackageData();
 
             List<Movie> movies = await _context.Movie.ToListAsync();
 
-            if (!string.IsNullOrEmpty(movieTitle))
+            if (!string.IsNullOrEmpty(filter.Title))
                 movies = movies
-                    .Where(x => x.Title!.Contains(movieTitle))
+                    .Where(x => x.Title!.Contains(filter.Title))
                     .ToList();
 
-            if (!string.IsNullOrEmpty(movieGenre))
+            if (!string.IsNullOrEmpty(filter.Genre))
                 movies = movies
-                    .Where(x => x.Genre == movieGenre)
+                    .Where(x => x.Genre == filter.Genre)
                     .ToList();
 
-            if (!string.IsNullOrEmpty(movieRating))
+            if (!string.IsNullOrEmpty(filter.Rating))
                 movies = movies
-                    .Where(x => x.Rating == movieRating)
+                    .Where(x => x.Rating == filter.Rating)
                     .ToList();
 
             var count = movies.Count();

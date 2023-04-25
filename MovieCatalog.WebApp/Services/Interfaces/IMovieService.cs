@@ -1,10 +1,11 @@
-﻿using MovieCatalog.WebApp.Models;
+﻿using MovieCatalog.WebApp.Dtos;
+using MovieCatalog.WebApp.Models;
 
 namespace MovieCatalog.WebApp.Services.Interfaces
 {
     public interface IMovieService
     {
-        public Task<MoviePackageData> GetAllAsync(string movieTitle, string movieGenre, string movieRating, int pageNumber, int pageSize);
+        public Task<MoviePackageData> GetAllAsync(MovieDto filter, int pageNumber, int pageSize);
 
         public Task<List<string>> GetGenresAsync();
 

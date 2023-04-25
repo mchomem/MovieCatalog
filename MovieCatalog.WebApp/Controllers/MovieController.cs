@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MovieCatalog.WebApp.Dtos;
 using MovieCatalog.WebApp.Models;
 using MovieCatalog.WebApp.Services.Interfaces;
 
@@ -20,9 +21,16 @@ namespace MovieCatalog.WebApp.Controllers
 
             int pageSize = 10;
 
+            MovieDto filter = new MovieDto()
+            {
+                Title = titleFilter,
+                Genre = genreFilter,
+                Rating = ratingFilter
+            };
+
             var movieFiltersView = new MovieViewModel
             {
-                MoviePackageData = await _movieService.GetAllAsync(titleFilter!, genreFilter, ratingFilter, pageNumber!.Value, pageSize),
+                MoviePackageData = await _movieService.GetAllAsync(filter, pageNumber!.Value, pageSize),
                 Genres = new SelectList(await _movieService.GetGenresAsync()),
                 Ratings = new SelectList(await _movieService.GetRatingsAsync()),
                 PageIndex = pageNumber.Value,
