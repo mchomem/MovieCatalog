@@ -34,6 +34,7 @@ namespace MovieCatalog.WebApp.Repositories
                 = await _context.Movie
                     .Select(x => new MovieDto()
                     {
+                        Id = x.Id,
                         Title = x.Title,
                         ReleaseDate = x.ReleaseDate,
                         Genre = x.Genre,
@@ -46,6 +47,7 @@ namespace MovieCatalog.WebApp.Repositories
                     .OrderByDescending(x => x.Id)
                     .Select(x => new MovieDto()
                     {
+                        Id = x.Id,
                         Title = x.Title,
                         ReleaseDate = x.ReleaseDate,
                         Genre = x.Genre,

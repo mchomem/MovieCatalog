@@ -6,7 +6,6 @@ namespace MovieCatalog.WebApp.Services
 {
     public class DashboardService : IDashboardService
     {
-        // private readonly MovieCatalogContext _context;
         private readonly IDashboardRepository _dashboardRepository;
 
         public DashboardService(IDashboardRepository dashboardRepository)

@@ -21,11 +21,13 @@
             self.$totalMovieRecords = $('#totalMovieRecords');
             self.$moviesByRating = $('#moviesByRating');
 
+            self.$linkDetailsFirstMovie = $('#linkDetailsFirstMovie');
             self.$firstMovieTitle = $('#firstMovieTitle');
             self.$firstMovieReleaseDate = $('#firstMovieReleaseDate');
             self.$firstMovieGenre = $('#firstMovieGenre');
             self.$firstMovieRating = $('#firstMovieRating');
 
+            self.$linkDetailsLastMovie = $('#linkDetailsLastMovie');
             self.$lastMovieTitle = $('#lastMovieTitle');
             self.$lastMovieReleaseDate = $('#lastMovieReleaseDate');
             self.$lastMovieGenre = $('#lastMovieGenre');
@@ -44,11 +46,13 @@
                     if (data != null) {
                         self.$totalMovieRecords.text(data.totalMovies);
 
+                        self.$linkDetailsFirstMovie.prop('href', `/movie/details/${data.firstMovieAdded.id}`);
                         self.$firstMovieTitle.text(data.firstMovieAdded.title);
                         self.$firstMovieReleaseDate.text(moment(data.firstMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
                         self.$firstMovieGenre.text(data.firstMovieAdded.genre);
                         self.$firstMovieRating.text(data.firstMovieAdded.rating);
 
+                        self.$linkDetailsLastMovie.prop('href', `/movie/details/${data.lastMovieAdded.id}`);
                         self.$lastMovieTitle.text(data.lastMovieAdded.title);
                         self.$lastMovieReleaseDate.text(moment(data.lastMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
                         self.$lastMovieGenre.text(data.lastMovieAdded.genre);
@@ -61,12 +65,12 @@
                             let rand = Math.floor(Math.random() * bootStrapBgColors.length);
 
                             let div = `<div class="col d-flex align-items-stretch" >
-                                                                <div class="card bg-${bootStrapBgColors[rand]}" style = "width:100%;" >
-                                                                        <div class="card-body d-flex flex-column text-center fw-bold text-white">
-                                                                        ${x.totalMovies} - ${x.rating}
-                                                                    </div>
-                                                                </div>
-                                                            </div>`
+                                                <div class="card bg-${bootStrapBgColors[rand]}" style = "width:100%;" >
+                                                        <div class="card-body d-flex flex-column text-center fw-bold text-white">
+                                                        ${x.totalMovies} - ${x.rating}
+                                                    </div>
+                                                </div>
+                                            </div>`
 
                             self.$moviesByRating.append(div);
                         });
@@ -120,11 +124,15 @@
         <div class="col d-flex align-items-stretch">
             <div class="card bg-danger text-white" style="width:100%;">
                 <div class="card-body d-flex flex-column text-center">
-                    First movie added to catalog
-                    <label id="firstMovieTitle" style="font-size:20px;"></label>
-                    <label id="firstMovieReleaseDate" style="font-size:20px;"></label>
-                    <label id="firstMovieGenre" style="font-size:20px;"></label>
-                    <label id="firstMovieRating" style="font-size:20px;"></label>
+                    <a id="linkDetailsFirstMovie" href="#">
+                        <ul>
+                            <li>First movie added to catalog</li>
+                            <li><span id="firstMovieTitle" style="font-size:20px;"></span></li>
+                            <li><span id="firstMovieReleaseDate" style="font-size:20px;"></span></li>
+                            <li><span id="firstMovieGenre" style="font-size:20px;"></span></li>
+                            <li><span id="firstMovieRating" style="font-size:20px;"></span></li>
+                        </ul>
+                    </a>
                 </div>
             </div>
         </div>
@@ -132,11 +140,15 @@
         <div class="col d-flex align-items-stretch">
             <div class="card bg-warning text-white" style="width:100%;">
                 <div class="card-body d-flex flex-column text-center">
-                    Last movie added to catalog
-                    <label id="lastMovieTitle" style="font-size:20px;"></label>
-                    <label id="lastMovieReleaseDate" style="font-size:20px;"></label>
-                    <label id="lastMovieGenre" style="font-size:20px;"></label>
-                    <label id="lastMovieRating" style="font-size:20px;"></label>
+                    <a id="linkDetailsLastMovie" href="#">
+                        <ul style="list-style-type: none;">
+                            <li>Last movie added to catalog</li>
+                            <li><span id="lastMovieTitle" style="font-size:20px;"></span></li>
+                            <li><span id="lastMovieReleaseDate" style="font-size:20px;"></span></li>
+                            <li><span id="lastMovieGenre" style="font-size:20px;"></span></li>
+                            <li><span id="lastMovieRating" style="font-size:20px;"></span></li>
+                        </ul>
+                    </a>
                 </div>
             </div>
         </div>
@@ -155,3 +167,21 @@
         </div>
     </div>
 </div>
+
+<style>
+    a {
+        color: #aabbcc;
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+    u {
+        list-style-type: none;
+    }
+</style>
