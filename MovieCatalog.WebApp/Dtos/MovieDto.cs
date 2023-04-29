@@ -1,4 +1,6 @@
-﻿namespace MovieCatalog.WebApp.Dtos
+﻿using MovieCatalog.WebApp.Models;
+
+namespace MovieCatalog.WebApp.Dtos
 {
     [Serializable]
     public class MovieDto
@@ -8,6 +10,11 @@
         public DateTime ReleaseDate { get; set; }
         public string? Genre { get; set; }
         public decimal Price { get; set; }
-        public string? Rating { get; set; }
+        public Rating Rating { get; set; }
+
+        public MovieDto()
+        {
+            Rating = new Rating();
+        }
     }
 }

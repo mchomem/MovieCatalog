@@ -15,9 +15,11 @@ builder.Services.AddDbContext<MovieCatalogContext>(options =>
         .UseSqlServer(builder.Configuration.GetConnectionString("MovieCatalogContext") ?? throw new InvalidOperationException("Connection string 'MovieCatalogContext' not found.")));
 
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

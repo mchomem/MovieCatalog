@@ -22,7 +22,7 @@ namespace MovieCatalog.WebApp.Repositories
             DashboardDto dashboardData = new DashboardDto();
             dashboardData.TotalMovies = await _context.Movie.CountAsync();
             dashboardData.MoviesRating = await _context.Movie
-                .GroupBy(x => x.Rating)
+                .GroupBy(x => x.Rating.Name)
                 .Select(x => new MovieRatingDto()
                 {
                     Rating = x.Key,
@@ -38,7 +38,7 @@ namespace MovieCatalog.WebApp.Repositories
                         Title = x.Title,
                         ReleaseDate = x.ReleaseDate,
                         Genre = x.Genre,
-                        Rating = x.Rating
+                        Rating = x.Rating!
                     })
                     .FirstOrDefaultAsync();
 
@@ -51,7 +51,7 @@ namespace MovieCatalog.WebApp.Repositories
                         Title = x.Title,
                         ReleaseDate = x.ReleaseDate,
                         Genre = x.Genre,
-                        Rating = x.Rating
+                        Rating = x.Rating!
                     })
                     .FirstOrDefaultAsync();
 

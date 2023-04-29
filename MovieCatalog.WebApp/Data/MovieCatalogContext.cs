@@ -6,6 +6,7 @@ namespace MovieCatalog.WebApp.Data
     public class MovieCatalogContext : DbContext
     {
         public DbSet<Movie> Movie { get; set; } = default!;
+        public DbSet<Rating> Rating { get; set; } = default!;
 
         public MovieCatalogContext(DbContextOptions<MovieCatalogContext> options)
             : base(options)

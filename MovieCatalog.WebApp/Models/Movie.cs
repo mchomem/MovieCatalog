@@ -27,15 +27,7 @@ namespace MovieCatalog.WebApp.Models
         //[Range(1,100)]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
-
-        // Regex explanation:
-        // The first letter is upper case
-        // Allow numbers and special characteres in subsequencial space, "PG-13" is valid!
-        [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
-        [Required]
-        [StringLength(5)]
-        public string? Rating { get; set; }
+        public decimal Price { get; set; }        
 
         [Display(Name = "Created in")]
         [Column(TypeName = "datetime")]
@@ -47,5 +39,9 @@ namespace MovieCatalog.WebApp.Models
         [Column(TypeName = "datetime")]
         [DataType(DataType.DateTime)]
         public DateTime? ModifiedIn { get; set; }
+
+        [Required]
+        public int RatingId { get; set; }
+        public Rating? Rating { get; set; }
     }
 }

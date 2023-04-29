@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieCatalog.WebApp.Data;
 
@@ -11,9 +12,11 @@ using MovieCatalog.WebApp.Data;
 namespace MovieCatalog.WebApp.Migrations
 {
     [DbContext(typeof(MovieCatalogContext))]
-    partial class MovieCatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20230428034858_AddTableRating")]
+    partial class AddTableRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

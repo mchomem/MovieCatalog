@@ -50,13 +50,13 @@
                         self.$firstMovieTitle.text(data.firstMovieAdded.title);
                         self.$firstMovieReleaseDate.text(moment(data.firstMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
                         self.$firstMovieGenre.text(data.firstMovieAdded.genre);
-                        self.$firstMovieRating.text(data.firstMovieAdded.rating);
+                        self.$firstMovieRating.text(data.firstMovieAdded.rating.name);
 
                         self.$linkDetailsLastMovie.prop('href', `/movie/details/${data.lastMovieAdded.id}`);
                         self.$lastMovieTitle.text(data.lastMovieAdded.title);
                         self.$lastMovieReleaseDate.text(moment(data.lastMovieAdded.releaseDate).format('DD[/]MM[/]YYYY'));
                         self.$lastMovieGenre.text(data.lastMovieAdded.genre);
-                        self.$lastMovieRating.text(data.lastMovieAdded.rating);
+                        self.$lastMovieRating.text(data.lastMovieAdded.rating.name);
 
                         data.moviesRating.forEach(function (x) {
 
