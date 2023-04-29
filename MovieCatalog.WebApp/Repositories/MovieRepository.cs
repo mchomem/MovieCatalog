@@ -17,7 +17,9 @@ namespace MovieCatalog.WebApp.Repositories
         {
             MoviePackageData moviePackageData = new MoviePackageData();
 
-            List<Movie> movies = await _context.Movie.ToListAsync();
+            List<Movie> movies = await _context.Movie
+                .Include(x => x.Rating)
+                .ToListAsync();
 
             if (!string.IsNullOrEmpty(filter.Title))
                 movies = movies
@@ -29,7 +31,7 @@ namespace MovieCatalog.WebApp.Repositories
                     .Where(x => x.Genre == filter.Genre)
                     .ToList();
 
-            if (!string.IsNullOrEmpty(filter.Rating))
+            if (!string.IsNullOrEmpty(filter.Rating.Name))
                 movies = movies
                     .Where(x => x.Rating == filter.Rating)
                     .ToList();
@@ -51,7 +53,7 @@ namespace MovieCatalog.WebApp.Repositories
                 ReleaseDate = x.ReleaseDate,
                 Genre = x.Genre,
                 Price = x.Price,
-                Rating = x.Rating,
+                Rating = x.Rating!,
             })
             .ToList();
 
@@ -72,8 +74,8 @@ namespace MovieCatalog.WebApp.Repositories
         public async Task<List<string>> GetRatingsAsync()
         {
             var list = await _context.Movie
-                .OrderBy(x => x.Rating)
-                .Select(x => x.Rating)
+                .OrderBy(x => x.Rating!.Name)
+                .Select(x => x.Rating!.Name)
                 .Distinct()
                 .ToListAsync();
 
@@ -83,6 +85,7 @@ namespace MovieCatalog.WebApp.Repositories
         public async Task<Movie> GetAsync(int id)
         {
             var movie = await _context.Movie
+                .Include(x => x.Rating)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             return movie!;
@@ -91,12 +94,36 @@ namespace MovieCatalog.WebApp.Repositories
         public async Task CreateAsync(Movie movie)
         {
             _context.Add(movie);
+
+            Rating rating = (await _context.Rating
+                .Where(x => x.Id == movie.RatingId)
+                .FirstOrDefaultAsync())!;
+
+            if (rating is null)
+                throw new Exception("Ratins cannot null in Movie.");
+
+            movie.Rating = rating;
+
+            _context.Entry(movie.Rating!).State = EntityState.Unchanged;
+
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Movie movie)
         {
             _context.Update(movie);
+
+            Rating rating = (await _context.Rating
+                .Where(x => x.Id == movie.RatingId)
+                .FirstOrDefaultAsync())!;
+
+            if (rating is null)
+                throw new Exception("Ratins cannot null in Movie.");
+
+            movie.Rating = rating;
+
+            _context.Entry(movie.Rating!).State = EntityState.Unchanged;
+
             await _context.SaveChangesAsync();
         }
 
@@ -107,6 +134,7 @@ namespace MovieCatalog.WebApp.Repositories
             if (movie != null)
             {
                 _context.Movie.Remove(movie);
+                _context.Entry(movie.Rating!).State = EntityState.Unchanged;
                 await _context.SaveChangesAsync();
             }
         }

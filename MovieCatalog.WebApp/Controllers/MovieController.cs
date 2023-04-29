@@ -10,9 +10,13 @@ namespace MovieCatalog.WebApp.Controllers
     public class MovieController : Controller
     {
         private readonly IMovieService _movieService;
+        private readonly IRatingService _ratingService;
 
-        public MovieController(IMovieService movieService)
-            => _movieService = movieService;
+        public MovieController(IMovieService movieService, IRatingService ratingService)
+        {
+            _movieService = movieService;
+            _ratingService = ratingService;
+        }
 
         public async Task<IActionResult> Index(string titleFilter, string genreFilter, string ratingFilter, int? pageNumber = 1)
         {
@@ -25,7 +29,7 @@ namespace MovieCatalog.WebApp.Controllers
             {
                 Title = titleFilter,
                 Genre = genreFilter,
-                Rating = ratingFilter
+                Rating = new Rating() { Name = ratingFilter }
             };
 
             var movieFiltersView = new MovieViewModel
@@ -51,8 +55,9 @@ namespace MovieCatalog.WebApp.Controllers
         }
 
         // GET: Movie/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await PopulateRatingDropDrowLists();
             return View();
         }
 
@@ -61,13 +66,15 @@ namespace MovieCatalog.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,RatingId")] Movie movie)
         {
             if (ModelState.IsValid)
             {
                 await _movieService.CreateAsync(movie);
                 return RedirectToAction(nameof(Index));
             }
+
+            await PopulateRatingDropDrowLists(movie.RatingId);
             return View(movie);
         }
 
@@ -79,6 +86,8 @@ namespace MovieCatalog.WebApp.Controllers
             if (movie == null)
                 return NotFound();
 
+            await PopulateRatingDropDrowLists();
+
             return View(movie);
         }
 
@@ -87,7 +96,7 @@ namespace MovieCatalog.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating,CreatedIn,ModifiedIn")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,RatingId,CreatedIn,ModifiedIn")] Movie movie)
         {
             if (id != movie.Id)
             {
@@ -103,6 +112,8 @@ namespace MovieCatalog.WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    await PopulateRatingDropDrowLists();
+
                     if (await _movieService.Exists(id))
                     {
                         return NotFound();
@@ -135,6 +146,13 @@ namespace MovieCatalog.WebApp.Controllers
         {
             await _movieService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task PopulateRatingDropDrowLists(object? selectedRating = null)
+        {
+            var ratings = await _ratingService.GetAllAsync();
+
+            ViewBag.RatingId = new SelectList(ratings, "Id", "Name", selectedRating);
         }
     }
 }

@@ -14,40 +14,44 @@
             <input type="hidden" asp-for="Id" />
             <div class="row mt-3">
                 <div class="col-sm-12 col-md-8 col-lg-4">
-                    <label asp-for="Title" class="control-label"></label>
+                    <label asp-for="Title" class="form-label"></label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
 
                 <div class="col-sm-12 col-md-8 col-lg-2">
-                    <label asp-for="ReleaseDate" class="control-label"></label>
+                    <label asp-for="ReleaseDate" class="form-label"></label>
                     <input asp-for="ReleaseDate" class="form-control" />
                     <span asp-validation-for="ReleaseDate" class="text-danger"></span>
                 </div>
 
                 <div class="col-sm-12 col-md-8 col-lg-2">
-                    <label asp-for="Genre" class="control-label"></label>
+                    <label asp-for="Genre" class="form-label"></label>
                     <input asp-for="Genre" class="form-control" />
                     <span asp-validation-for="Genre" class="text-danger"></span>
-                </div>
+                </div>                
+            </div>
 
+            <div class="row mt-3">
                 <div class="col-sm-12 col-md-8 col-lg-2">
-                    <label asp-for="Price" class="control-label"></label>
+                    <label asp-for="Price" class="form-label"></label>
                     <input asp-for="Price" class="form-control" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
                 <div class="col-sm-12 col-md-8 col-lg-2">
-                    <label asp-for="Rating" class="control-label"></label>
-                    <input asp-for="Rating" class="form-control" />
-                    <span asp-validation-for="Rating" class="text-danger"></span>
+                    <label asp-for="Rating" class="form-label"></label>
+                    @Html.DropDownList("RatingId", null, "Select a rating", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Rating)
                 </div>
+
                 <div class="col-sm-12 col-md-8 col-lg-3">
-                    <label asp-for="CreatedIn" class="control-label"></label>
-                    <input asp-for="CreatedIn" class="form-control" readonly="@(true)"/>
+                    <label asp-for="CreatedIn" class="form-label"></label>
+                    <input asp-for="CreatedIn" class="form-control" readonly="@(true)" />
                     <span asp-validation-for="CreatedIn" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="row mt-3">
                 <div class="col">
                     <button class="btn btn-outline-primary"
