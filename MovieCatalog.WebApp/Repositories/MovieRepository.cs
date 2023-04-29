@@ -33,7 +33,7 @@ namespace MovieCatalog.WebApp.Repositories
 
             if (!string.IsNullOrEmpty(filter.Rating.Name))
                 movies = movies
-                    .Where(x => x.Rating == filter.Rating)
+                    .Where(x => x.Rating.Name == filter.Rating.Name)
                     .ToList();
 
             var count = movies.Count();
