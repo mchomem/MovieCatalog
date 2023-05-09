@@ -10,8 +10,8 @@ namespace MovieCatalog.WebApp.Models
         {
             using (var context = new MovieCatalogContext(service.GetRequiredService<DbContextOptions<MovieCatalogContext>>()))
             {
-                if (!context.Database.EnsureCreated())
-                    Console.Write("Database already exists.");
+                if(!context.Database.CanConnect())
+                    context.Database.Migrate();
 
                 if (context.Movie.Any())
                     return;
