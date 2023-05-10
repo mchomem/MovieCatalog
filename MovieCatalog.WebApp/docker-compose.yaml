@@ -1,0 +1,18 @@
+﻿version: '3.4'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "essea@2023"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+
+  web:
+    depends_on:
+      - db
+    build:
+      dockerfile: Dockerfile    
+    ports:
+      - "3000:80"
