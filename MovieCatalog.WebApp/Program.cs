@@ -8,18 +8,24 @@ using MovieCatalog.WebApp.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var info = builder.Configuration.GetSection("Microsoft.AspNetCore");
-Console.WriteLine(info);
+string dbConnection = string.Empty;
 
-builder.Services.AddDbContext<MovieCatalogContext>(options =>
+#if RELEASE
+dbConnection = builder.Configuration.GetSection("Database:dockerDbContext").Value
+?? throw new InvalidOperationException("Connection string 'dockerDbContext' not found.");
+#else
+dbConnection = builder.Configuration.GetSection("Database:localDbContext").Value
+?? throw new InvalidOperationException("Connection string 'localDbContext' not found.");
+#endif
+
+builder.Services.AddDbContext<MovieCatalogContext>
+(
+    options =>
     options
         .LogTo(Console.WriteLine)
         .EnableSensitiveDataLogging()
-        .UseSqlServer
-        (
-            builder.Configuration.GetConnectionString("MovieCatalogContext")
-            ?? throw new InvalidOperationException("Connection string 'MovieCatalogContext' not found."))
-        );
+        .UseSqlServer(dbConnection)
+);
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
