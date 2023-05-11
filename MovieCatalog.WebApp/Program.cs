@@ -8,11 +8,18 @@ using MovieCatalog.WebApp.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var info = builder.Configuration.GetSection("Microsoft.AspNetCore");
+Console.WriteLine(info);
+
 builder.Services.AddDbContext<MovieCatalogContext>(options =>
     options
         .LogTo(Console.WriteLine)
         .EnableSensitiveDataLogging()
-        .UseSqlServer(builder.Configuration.GetConnectionString("MovieCatalogContext") ?? throw new InvalidOperationException("Connection string 'MovieCatalogContext' not found.")));
+        .UseSqlServer
+        (
+            builder.Configuration.GetConnectionString("MovieCatalogContext")
+            ?? throw new InvalidOperationException("Connection string 'MovieCatalogContext' not found."))
+        );
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
